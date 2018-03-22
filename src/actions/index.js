@@ -7,9 +7,8 @@ export const fetchEventsSuccess = response => ({
     events: response.events
 });
 
-export const fetchEventsError = error => ({
-    type: 'FETCH_EVENTS_ERROR',
-    error
+export const fetchEventsError = () => ({
+    type: 'FETCH_EVENTS_ERROR'
 });
 
 export const fetchEvents = url => {
@@ -19,7 +18,7 @@ export const fetchEvents = url => {
         fetch(url)
             .then(response => response.json())
             .then(jsonResponse => dispatch(fetchEventsSuccess(jsonResponse)))
-            .catch(error => dispatch(fetchEventsError(error)));
+            .catch(error => dispatch(fetchEventsError()));
     };
 }
 

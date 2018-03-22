@@ -26,8 +26,6 @@ export default (state = initialState, action) => {
 
             let groupedEvents = groupByEventType(action.events, 'linkedEventTypeId', 'linkedEventTypeName', 'typeId', 'typeName');
 
-            console.log(groupedEvents);
-
             let events = [];
 
             for (let competitionId in groupedEvents) {
@@ -46,10 +44,9 @@ export default (state = initialState, action) => {
                 .set('eventsAreLoading', initialState.get('eventsAreLoading'))
                 .set('events', fromJS(events));
         case 'FETCH_EVENTS_ERROR':
-            let error = action.error && action.error.message ? action.error.message : 'Error fetching events';
             return state
                 .set('eventsAreLoading', initialState.get('eventsAreLoading'))
-                .set('eventsLoadingError', error);
+                .set('eventsLoadingError', 'Error loading events data');
         case 'OPEN_CLOSE_COMPETITION':
             let oldEvents = state.get('events').toJS();
             let newEvents = oldEvents.map(rec => {
