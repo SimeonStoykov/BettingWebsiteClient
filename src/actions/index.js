@@ -14,11 +14,16 @@ export const fetchEventsError = error => ({
 
 export const fetchEvents = url => {
     return dispatch => {
-      dispatch(fetchEventsLoading());
-  
-      fetch(url)
-        .then(response => response.json())
-        .then(jsonResponse => dispatch(fetchEventsSuccess(jsonResponse)))
-        .catch(error => dispatch(fetchEventsError(error)));
+        dispatch(fetchEventsLoading());
+
+        fetch(url)
+            .then(response => response.json())
+            .then(jsonResponse => dispatch(fetchEventsSuccess(jsonResponse)))
+            .catch(error => dispatch(fetchEventsError(error)));
     };
-  }
+}
+
+export const openCloseCompetition = competitionId => ({
+    type: 'OPEN_CLOSE_COMPETITION',
+    competitionId
+});

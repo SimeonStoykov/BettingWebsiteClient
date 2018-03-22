@@ -1,0 +1,56 @@
+.event-info {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.event-teams {
+    display: inline-block;
+    font-weight: bold;
+    padding: 5px; 
+}
+
+.event-score {
+    float: right;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #0f3484;
+    padding: 5px 10px;
+    vertical-align: middle;
+}
+
+@media only screen and (max-width: 800px) {
+    .event-info {
+        font-size: 14.5px;
+    }
+} 
+
+@media only screen and (max-width: 650px) {
+    .event-info {
+        font-size: 14px;
+    }
+} 
+
+@media only screen and (max-width: 550px) {
+    .event-info {
+        font-size: 13.5px;
+    }
+} 
+
+@media only screen and (max-width: 480px) {
+    .event-info {
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 460px) {
+    .event-info {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .event-info {
+        font-size: 10.5px;
+    }
+} 

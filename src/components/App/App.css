@@ -1,14 +1,14 @@
-.App {
+.app {
   text-align: center;
-  font-family: Cambria, Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
 }
 
-.App-header {
+.app-header {
   background-color: #153f8e;
   padding: 15px;
   color: #fff;
 }
 
-.App-title {
+.app-title {
   font-size: 2em;
 }

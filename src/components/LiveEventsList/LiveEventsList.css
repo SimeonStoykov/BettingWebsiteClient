@@ -1,0 +1,107 @@
+.competition-title-box {
+    color: #3c3c3c;
+    background-color: #dce3ed;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    border-radius: 5px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.competition-title {
+    display: inline-block;
+    width: 90%;
+    font-weight: normal;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.competition-title-box:hover {
+    cursor: pointer;
+}
+
+.football-live-box .competition-title-box:first-child {
+    margin-top: 7px;
+}
+
+.arrow-wrapper {
+    display: inline-block;
+    width: 8%;
+    padding-right: 2%;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.arrow-img {
+    width: 20px;
+}
+
+.live-arrows {
+    width: 40px;
+    vertical-align: middle;
+}
+
+.opened-competition {
+    color: #fff;
+    background-color: #132c6c;
+}
+
+.football-live-box {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 25px;
+  }
+  
+  .football-live-title-box {
+    color: #353865;
+    background-color: #cfdae9;
+  }
+  
+  .football-live-title {
+    text-align: left;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  @media only screen and (max-width: 1095px) {
+    .football-live-box {
+      width: 65%;
+    }
+  } 
+  
+  @media only screen and (max-width: 880px) {
+    .football-live-box {
+      width: 70%;
+    }
+  } 
+  
+  @media only screen and (max-width: 800px) {
+    .football-live-box {
+      width: 75%;
+    }
+  } 
+  
+  @media only screen and (max-width: 680px) {
+    .football-live-box {
+      width: 80%;
+    }
+  } 
+  
+  @media only screen and (max-width: 620px) {
+    .football-live-box {
+      width: 85%;
+    }
+  } 
+  
+  @media only screen and (max-width: 580px) {
+    .football-live-box {
+      width: 90%;
+    }
+  } 
+  
+  @media only screen and (max-width: 530px) {
+    .football-live-box {
+      width: 100%;
+    }
+  } 
