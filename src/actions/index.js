@@ -4,7 +4,8 @@ export const fetchEventsLoading = () => ({
 
 export const fetchEventsSuccess = response => ({
     type: 'FETCH_EVENTS_SUCCESS',
-    events: response.events
+    events: response.events,
+    markets: response.markets
 });
 
 export const fetchEventsError = () => ({
@@ -26,3 +27,19 @@ export const openCloseCompetition = competitionId => ({
     type: 'OPEN_CLOSE_COMPETITION',
     competitionId
 });
+
+export const getMarketSuccess = response => ({
+    type: 'GET_MARKET_SUCCESS',
+    response
+});
+
+export const getMarket = url => {
+    return dispatch => {
+        // dispatch(fetchEventsLoading());
+
+        fetch(url)
+            .then(response => response.json())
+            .then(jsonResponse => dispatch(getMarketSuccess(jsonResponse)))
+            // .catch(error => dispatch(fetchEventsError()));
+    };
+}

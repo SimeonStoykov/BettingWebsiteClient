@@ -5,7 +5,7 @@ import arrowsImg from '../../images/arrows.png';
 import arrowUp from '../../images/up-arrow.svg';
 import arrowDown from '../../images/down-arrow.svg';
 
-const LiveEventsList = ({ events, eventsAreLoading, eventsLoadingError, openCloseCompetition }) => {
+const LiveEventsList = ({ competitions, eventsAreLoading, eventsLoadingError, openCloseCompetition, primaryMarkets }) => {
     return (
         <div className='football-live-box'>
             <div className='football-live-title-box'>
@@ -15,19 +15,20 @@ const LiveEventsList = ({ events, eventsAreLoading, eventsLoadingError, openClos
             {eventsAreLoading ? 'Loading...' : ''}
             {eventsLoadingError}
             {
-                events.map(rec => {
+                competitions.map(rec => {
                     return (
-                        <div key={rec.competition.id}>
-                            <div className={rec.competition.isOpened ? 'competition-title-box opened-competition' : 'competition-title-box'} onClick={() => openCloseCompetition(rec.competition.id)}>
-                                <h3 className='competition-title'>{rec.competition.name}</h3>
+                        <div key={rec.id}>
+                            <div className={rec.isOpened ? 'competition-title-box opened-competition' : 'competition-title-box'} onClick={() => openCloseCompetition(rec.id)}>
+                                <h3 className='competition-title'>{rec.name}</h3>
                                 <div className='arrow-wrapper'>
-                                    <img src={rec.competition.isOpened ? arrowUp : arrowDown} alt='Open close competition' className='arrow-img' />
+                                    <img src={rec.isOpened ? arrowUp : arrowDown} alt='Open close competition' className='arrow-img' />
                                 </div>
                             </div>
                             {
-                                rec.competition.isOpened &&
-                                rec.eventsData.map(currEvent => {
-                                    return <EventShortInfo key={currEvent.eventId} data={currEvent} />;
+                                rec.isOpened &&
+                                rec.events.map(currEvent => {
+                                    let primaryMarket = (primaryMarkets && primaryMarkets[currEvent.eventId] && primaryMarkets[currEvent.eventId][0]) || null;
+                                    return <EventShortInfo key={currEvent.eventId} data={currEvent} primaryMarket={primaryMarket} />;
                                 })
                             }
                         </div>

@@ -17,28 +17,30 @@ class App extends Component {
   }
 
   render() {
-    let { events, eventsAreLoading, eventsLoadingError, openCloseCompetition } = this.props;
+    let { competitions, eventsAreLoading, eventsLoadingError, openCloseCompetition, primaryMarkets } = this.props;
 
     return (
       <div className="app">
         <header className="app-header">
           <h1 className="app-title">Betting Website</h1>
         </header>
-        <LiveEventsList events={events} eventsAreLoading={eventsAreLoading} eventsLoadingError={eventsLoadingError} openCloseCompetition={openCloseCompetition} />
+        <LiveEventsList competitions={competitions} eventsAreLoading={eventsAreLoading} eventsLoadingError={eventsLoadingError} openCloseCompetition={openCloseCompetition} primaryMarkets={primaryMarkets} />
       </div>
     );
   }
 }
 
 App.propTypes = {
-  events: PropTypes.array,
+  competitions: PropTypes.array,
   eventsAreLoading: PropTypes.bool,
-  eventsLoadingError: PropTypes.string
+  eventsLoadingError: PropTypes.string,
+  fetchEvents: PropTypes.func,
+  openCloseCompetition: PropTypes.func
 };
 
 const mapStateToProps = state => {
   return {
-    events: state.appData.get('events').toJS(),
+    competitions: state.appData.get('competitions').toJS(),
     eventsAreLoading: state.appData.get('eventsAreLoading'),
     eventsLoadingError: state.appData.get('eventsLoadingError')
   };

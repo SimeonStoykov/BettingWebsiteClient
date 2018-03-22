@@ -3,10 +3,18 @@
     padding-bottom: 5px;
 }
 
+.event-show-primary-market {
+    padding: 5px;
+    display: inline-block;
+    width: 30px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
 .event-teams {
     display: inline-block;
     font-weight: bold;
-    padding: 5px; 
+    padding: 5px;
 }
 
 .event-score {
