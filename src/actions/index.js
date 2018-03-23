@@ -43,3 +43,29 @@ export const getMarket = url => {
             // .catch(error => dispatch(fetchEventsError()));
     };
 }
+
+export const showHidePrimaryMarket = market => ({
+    type: 'SHOW_HIDE_PRIMARY_MARKET',
+    market
+});
+
+export const changePriceRepr = representation => ({
+    type: 'CHANGE_PRICE_REPRESENTATION',
+    representation
+});
+
+export const getEventSuccess = response => ({
+    type: 'GET_EVENT_SUCCESS',
+    data: response
+});
+
+export const getEvent = url => {
+    return dispatch => {
+        // dispatch(getEventLoading());
+
+        fetch(url)
+            .then(response => response.json())
+            .then(jsonResponse => dispatch(getEventSuccess(jsonResponse)))
+            // .catch(error => dispatch(getEventError()));
+    };
+}

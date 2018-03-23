@@ -4,7 +4,9 @@ const initialState = fromJS({
     competitions: [],
     eventsMarkets: {},
     eventsAreLoading: false,
-    eventsLoadingError: null
+    eventsLoadingError: null,
+    priceRepresentation: 'fractions',
+    selectedEvent: {}
 });
 
 export default (state = initialState, action) => {
@@ -12,12 +14,6 @@ export default (state = initialState, action) => {
         case 'FETCH_EVENTS_LOADING':
             return state.set('eventsAreLoading', true);
         case 'FETCH_EVENTS_SUCCESS':
-            // for (let eventId in action.markets) {
-            //     let market = action.markets[eventId][0];
-            //     let marketEvent = action.events.find(rec => rec.eventId.toString() === eventId);
-            //     marketEvent && (marketEvent.markets = [market]);
-            // }
-
             let groupByEventType = (data, key, name, secondKey, secondName) => {
                 return data.reduce((groupedData, currEvent) => {
                     let groupId = currEvent[key];
@@ -71,15 +67,33 @@ export default (state = initialState, action) => {
 
             let eventMarkets = state.getIn(['eventsMarkets', eventId]).toJS();
             let existingMarketIndex = eventMarkets.map(e => e.marketId).indexOf(market.marketId);
-            let newMarket = {};
 
             if (existingMarketIndex > -1) {
-                newMarket = eventMarkets[existingMarketIndex];
+                let newMarket = { ...eventMarkets[existingMarketIndex] };
                 newMarket.outcomes = outcomes[market.marketId];
+                newMarket.isVisible = true;
                 return state.setIn(['eventsMarkets', eventId, existingMarketIndex], newMarket);
             }
 
             return state;
+        case 'SHOW_HIDE_PRIMARY_MARKET':
+            let currEventId = action.market.eventId.toString();
+            let searchedEventMarkets = state.get('eventsMarkets').toJS()[currEventId];
+            let searchedMarketIndex = searchedEventMarkets.map(e => e.marketId).indexOf(action.market.marketId);
+
+            if (searchedMarketIndex > -1) {
+                let newMarket = { ...searchedEventMarkets[searchedMarketIndex] };
+                newMarket.isVisible = !newMarket.isVisible;
+
+                return state.setIn(['eventsMarkets', currEventId, searchedMarketIndex], newMarket);
+            }
+
+            return state;
+        case 'CHANGE_PRICE_REPRESENTATION':
+            return state.set('priceRepresentation', action.representation);
+        case 'GET_EVENT_SUCCESS':
+            console.log(action.data);
+            return state.set('selectedEvent', fromJS(action.data.event));
         default:
             return state;
     }

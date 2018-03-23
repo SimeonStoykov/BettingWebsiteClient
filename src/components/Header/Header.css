@@ -1,0 +1,44 @@
+.app-header {
+    background-color: #153f8e;
+    padding: 15px;
+    color: #fff;
+    text-align: center;
+    font-family: Tahoma, Arial, sans-serif;
+  }
+  
+.header-title {
+    font-size: 2em;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.odds-box {
+    float: right;
+    margin-right: 50px;
+}
+
+.odds-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.odds-button {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #cfdae9;
+    border: 0;
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 10px;
+    border-radius: 5px;
+    color: #353865;
+}
+
+button.odds-button:last-child {
+    margin-right: 0px;
+}
+
+.odds-button-selected {
+    background-color: rgb(18, 187, 18);
+    color: #fff;
+}
