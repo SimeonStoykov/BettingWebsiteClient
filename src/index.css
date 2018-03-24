@@ -3,3 +3,39 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.accordion-box {
+  color: #3c3c3c;
+  background-color: #dce3ed;
+  margin-top: 0px;
+  border-radius: 5px;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.accordion-box:hover {
+  cursor: pointer;
+}
+
+.accordion-title {
+  display: inline-block;
+  width: 90%;
+  font-weight: normal;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.accordion-arrow-wrapper {
+    display: inline-block;
+    width: 8%;
+    padding-right: 2%;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.opened-accordion {
+  color: #fff;
+  background-color: #132c6c;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}

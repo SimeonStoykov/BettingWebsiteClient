@@ -1,0 +1,86 @@
+.win-draw-win-outcomes-box {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    border: 1px solid #b3bfd3;
+    box-sizing: border-box;
+}
+
+.win-draw-win-outcome-box {
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-image: linear-gradient(to bottom, #FFFFFF, #EBEFF5);
+    border-right: 2px solid #e4ebf3;
+    color: #484848;
+    display: table-cell;
+    text-align: center;
+}
+
+.win-draw-win-outcome-box:hover,
+.standard-outcome-price:hover {
+    background-image: linear-gradient(to bottom, #EBEFF5, #FFFFFF);
+}
+
+.price {
+    color: #d92231;
+    font-weight: bold;
+}
+
+.win-draw-win-outcomes-box > div:last-child {
+    border-right: 0;
+}
+
+.standard-outcomes-box {
+    border: 1px solid #b3bfd3;
+}
+
+.standard-outcome-box {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.standard-outcome-name {
+    display: table-cell;
+    font-weight: bold;
+    color: #484848;
+    border-right: 2px solid #e4ebf3;
+    border-bottom: 2px solid #e4ebf3;
+    padding: 10px;
+}
+
+.standard-outcome-price {
+    display: table-cell;
+    width: 20%;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid #e4ebf3;
+    cursor: pointer;
+    background-image: linear-gradient(to bottom, #FFFFFF, #EBEFF5);
+}
+
+.suspended,
+.not-displayable {
+    display: table-cell;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-right: 2px solid #e4ebf3;
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: #777777;
+    font-weight: bold;
+    background-image: none;
+}
+
+.suspended:hover,
+.not-displayable:hover {
+    background-image: none;
+}
+
+.not-displayable {
+    color: #484848;
+    background-color: #fff;
+}

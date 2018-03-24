@@ -28,18 +28,19 @@ export const openCloseCompetition = competitionId => ({
     competitionId
 });
 
-export const getMarketSuccess = response => ({
+export const getMarketSuccess = (response, caller) => ({
     type: 'GET_MARKET_SUCCESS',
-    response
+    response,
+    caller
 });
 
-export const getMarket = url => {
+export const getMarket = (url, caller) => {
     return dispatch => {
         // dispatch(fetchEventsLoading());
 
         fetch(url)
             .then(response => response.json())
-            .then(jsonResponse => dispatch(getMarketSuccess(jsonResponse)))
+            .then(jsonResponse => dispatch(getMarketSuccess(jsonResponse, caller)))
             // .catch(error => dispatch(fetchEventsError()));
     };
 }
@@ -69,3 +70,8 @@ export const getEvent = url => {
             // .catch(error => dispatch(getEventError()));
     };
 }
+
+export const openCloseMarket = marketId => ({
+    type: 'OPEN_CLOSE_MARKET',
+    marketId
+});

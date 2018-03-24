@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './EventShortInfo.css';
-import Market from '../Market/Market.js';
+import MarketOutcomes from '../MarketOutcomes/MarketOutcomes.js';
 import tokenImg from '../../images/token.svg';
 
 import {
@@ -10,26 +10,29 @@ import {
     showHidePrimaryMarket
 } from '../../actions';
 
-const getMarkettUrl = 'http://192.168.99.100:8888/sportsbook/market/';
+const getMarketUrl = 'http://192.168.99.100:8888/sportsbook/market/';
 
 class EventShortInfo extends Component {
     constructor(props) {
         super(props);
-        this.togglePrimaryMarket = this.togglePrimaryMarket.bind(this);
+        this.handleViewPrimaryMarket = this.handleViewPrimaryMarket.bind(this);
         this.viewEventDetails = this.viewEventDetails.bind(this);
     }
-    togglePrimaryMarket(primaryMarket) {
+
+    handleViewPrimaryMarket(primaryMarket) {
         let { showHidePrimaryMarket, getMarket } = this.props;
 
         if (primaryMarket.outcomes) { // Show/Hide market if there are outcomes (data is already fetched)
             showHidePrimaryMarket(primaryMarket);
         } else { // Get market data if there are no outcomes
-            getMarket(getMarkettUrl + primaryMarket.marketId);
+            getMarket(getMarketUrl + primaryMarket.marketId, 'footballLiveList');
         }
     }
+
     viewEventDetails(eventId) {
         eventId && this.props.history.push(`/event/${eventId}`);
     }
+
     render() {
         let { data, eventsMarkets, priceRepresentation } = this.props;
         let primaryMarket = (eventsMarkets && eventsMarkets[data.eventId] && eventsMarkets[data.eventId][0]) || {};
@@ -41,7 +44,7 @@ class EventShortInfo extends Component {
                 <div>
                     <div className='event-info'>
                         <div className='teams-and-score'>
-                            <div className='event-show-primary-market' onClick={this.togglePrimaryMarket.bind(this, primaryMarket)}>
+                            <div className='event-show-primary-market' onClick={this.handleViewPrimaryMarket.bind(this, primaryMarket)}>
                                 <img src={tokenImg} alt='Primary Market' title='View Primary Market' />
                             </div>
                             <div className='event-teams' title='View Event Details' onClick={this.viewEventDetails.bind(this, data.eventId)}>
@@ -53,7 +56,7 @@ class EventShortInfo extends Component {
                         </div>
                         {
                             primaryMarket.outcomes && primaryMarket.isVisible &&
-                            <Market data={primaryMarket} priceRepresentation={priceRepresentation} />
+                            <MarketOutcomes data={primaryMarket} priceRepresentation={priceRepresentation} />
                         }
                     </div>
                 </div>
@@ -78,7 +81,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getMarket: marketId => dispatch(getMarket(marketId)),
+        getMarket: (marketId, caller) => dispatch(getMarket(marketId, caller)),
         showHidePrimaryMarket: market => dispatch(showHidePrimaryMarket(market))
     }
 };

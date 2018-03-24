@@ -1,9 +1,98 @@
-.details {
-    display: inline-block;
-    width: 60%;
+.event-details-wrapper {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
 }
 
-.football-live-list {
-    display: inline-block;
+.event-details {
+    display: table-cell;
+    width: 60%;
+    padding-left: 3%;
+}
+
+.event-details-football-live-list {
+    display: table-cell;
     width: 40%;
+    vertical-align: top;
+}
+
+.event-teams-info {
+    background-color: #0d2051;
+    color: #fff;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.event-teams-info h2 {
+    margin-top: 0;
+}
+
+h4.event-category,
+h3.event-teams-names,
+h4.event-started-datetime {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.event-score-info {
+    background-color: #182B7C;
+    background-image: radial-gradient(ellipse 90% 100px at 50% 60px,#182b7c 0,#0e1556 50%,#07073d 70%);
+}
+
+.event-score-info-score-line {
+    display: table;
+    table-layout: fixed;
+    width: 95%;
+    margin: 0 auto;
+    padding: 30px 0;
+    height: 45px;
+}
+
+.home-team-score-line, 
+.away-team-score-line,
+.home-team-score, 
+.away-team-score {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.home-team-score-line,
+.away-team-score-line {
+    color: #000;
+    font-weight: bold;
+    background-color: #f3f3f3;
+    background-image: linear-gradient(to bottom,#fff 0,#fcfcfc 50%,#f3f3f3 50%,#f3f3f3 100%);
+    padding-right: 18px;
+    padding-left: 18px;
+}
+
+.home-team-score, 
+.away-team-score {
+    background-color: #c3110b;
+    background-image: linear-gradient(to bottom,#683028 0,#9a3731 50%,#922019 50%,#c3110b 100%);
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    width: 12%;
+    font-size: 1.4rem;
+}
+
+.home-team-score-line {
+    text-align: right;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.away-team-score-line {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.home-team-score {
+    border-right: 2px solid #683028;
+}
+
+.event-market {
+    margin-bottom: 7px;
 }

@@ -6,7 +6,7 @@ import './Home.css';
 const Home = ({ history }) => {
   return (
     <div>
-      <Header history={history} />
+      <Header history={history} className='home-header-box' />
       <LiveEventsList history={history} />
     </div>
   );
