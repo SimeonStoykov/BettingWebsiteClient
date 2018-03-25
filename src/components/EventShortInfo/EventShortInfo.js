@@ -41,24 +41,22 @@ class EventShortInfo extends Component {
             data.competitors[0].name && data.competitors[1].name &&
             data.scores && data.scores.home !== undefined && data.scores.away !== undefined) {
             return (
-                <div>
-                    <div className='event-info'>
-                        <div className='teams-and-score'>
-                            <div className='event-show-primary-market' onClick={this.handleViewPrimaryMarket.bind(this, primaryMarket)}>
-                                <img src={tokenImg} alt='Primary Market' title='View Primary Market' />
-                            </div>
-                            <div className='event-teams' title='View Event Details' onClick={this.viewEventDetails.bind(this, data.eventId)}>
-                                {data.competitors[0].name} vs {data.competitors[1].name}
-                            </div>
-                            <div className='event-score' title='Score'>
-                                <div className='score-box'>{data.scores.home} - {data.scores.away}</div>
-                            </div>
+                <div className='event-info'>
+                    <div className='teams-and-score'>
+                        <div className='event-show-primary-market' onClick={this.handleViewPrimaryMarket.bind(this, primaryMarket)}>
+                            <img src={tokenImg} alt='Primary Market' title='View Primary Market' />
                         </div>
-                        {
-                            primaryMarket.outcomes && primaryMarket.isVisible &&
-                            <MarketOutcomes data={primaryMarket} priceRepresentation={priceRepresentation} />
-                        }
+                        <div className='event-teams' title='View Event Details' onClick={this.viewEventDetails.bind(this, data.eventId)}>
+                            {data.competitors[0].name} vs {data.competitors[1].name}
+                        </div>
+                        <div className='event-score' title='Score'>
+                            <div className='score-box'>{data.scores.home} - {data.scores.away}</div>
+                        </div>
                     </div>
+                    {
+                        primaryMarket.outcomes && primaryMarket.isVisible &&
+                        <MarketOutcomes data={primaryMarket} priceRepresentation={priceRepresentation} />
+                    }
                 </div>
             );
         }

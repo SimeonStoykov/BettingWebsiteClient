@@ -4,6 +4,7 @@
     table-layout: fixed;
     border: 1px solid #b3bfd3;
     box-sizing: border-box;
+    font-size: 0.9rem;
 }
 
 .win-draw-win-outcome-box {
@@ -11,14 +12,15 @@
     padding-top: 10px;
     padding-bottom: 10px;
     background-image: linear-gradient(to bottom, #FFFFFF, #EBEFF5);
-    border-right: 2px solid #e4ebf3;
+    border-right: 1px solid #e4ebf3;
     color: #484848;
     display: table-cell;
     text-align: center;
 }
 
 .win-draw-win-outcome-box:hover,
-.standard-outcome-price:hover {
+.standard-outcome-price:hover,
+.correct-score-have-data:hover {
     background-image: linear-gradient(to bottom, #EBEFF5, #FFFFFF);
 }
 
@@ -33,6 +35,7 @@
 
 .standard-outcomes-box {
     border: 1px solid #b3bfd3;
+    font-size: 0.9rem;
 }
 
 .standard-outcome-box {
@@ -46,8 +49,8 @@
     display: table-cell;
     font-weight: bold;
     color: #484848;
-    border-right: 2px solid #e4ebf3;
-    border-bottom: 2px solid #e4ebf3;
+    border-right: 1px solid #e4ebf3;
+    border-bottom: 1px solid #e4ebf3;
     padding: 10px;
 }
 
@@ -56,7 +59,52 @@
     width: 20%;
     text-align: center;
     padding: 10px;
-    border-bottom: 2px solid #e4ebf3;
+    border-bottom: 1px solid #e4ebf3;
+    cursor: pointer;
+    background-image: linear-gradient(to bottom, #FFFFFF, #EBEFF5);
+}
+
+.correct-score-outcomes-box {
+    border: 1px solid #b3bfd3;
+    font-size: 0.9rem;
+}
+
+.correct-score-title-row {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    box-sizing: border-box;
+}
+
+.correct-score-title-row-home,
+.correct-score-title-row-draw,
+.correct-score-title-row-away {
+    display: table-cell;
+    text-align: center;
+    padding: 10px;
+    background-color: #ebeff5;
+    color: #727693;
+    font-weight: bold;
+}
+
+.correct-score-outcome-row {
+    display: table;
+    table-layout: fixed;
+    text-align: center;
+    color: #727693;
+    font-weight: bold;
+    width: 100%;
+}
+
+.correct-score-outcome-data {
+    display: table-cell;
+    padding: 10px;
+    border-right: 1px solid #e4ebf3;
+    border-bottom: 1px solid #e4ebf3;
+    color: #484848;
+}
+
+.correct-score-have-data {
     cursor: pointer;
     background-image: linear-gradient(to bottom, #FFFFFF, #EBEFF5);
 }
@@ -67,7 +115,7 @@
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-right: 2px solid #e4ebf3;
+    border-right: 1px solid #e4ebf3;
     cursor: not-allowed;
     background-color: #cccccc;
     color: #777777;
