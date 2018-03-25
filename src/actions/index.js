@@ -41,7 +41,7 @@ export const getMarket = (url, caller) => {
         fetch(url)
             .then(response => response.json())
             .then(jsonResponse => dispatch(getMarketSuccess(jsonResponse, caller)))
-            // .catch(error => dispatch(fetchEventsError()));
+        // .catch(error => dispatch(fetchEventsError()));
     };
 }
 
@@ -67,7 +67,7 @@ export const getEvent = url => {
         fetch(url)
             .then(response => response.json())
             .then(jsonResponse => dispatch(getEventSuccess(jsonResponse)))
-            // .catch(error => dispatch(getEventError()));
+        // .catch(error => dispatch(getEventError()));
     };
 }
 

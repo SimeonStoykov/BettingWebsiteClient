@@ -17,7 +17,7 @@ import {
 } from '../../actions';
 
 const getEventUrl = 'http://192.168.99.100:8888/sportsbook/event/';
-const getMarkettUrl = 'http://192.168.99.100:8888/sportsbook/market/';
+const getMarketUrl = 'http://192.168.99.100:8888/sportsbook/market/';
 
 class EventDetails extends Component {
     constructor(props) {
@@ -26,13 +26,28 @@ class EventDetails extends Component {
     }
 
     componentDidMount() {
+        let { match, getEvent, ws } = this.props;
+        let eventId = match && match.params && match.params.id;
+        getEvent(getEventUrl + eventId);
+        //subscribe after getEvent in promise and subscrb/unsubscrb in will receive props
+        ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${eventId}`], clearSubscription: false }));
+    }
+
+    componentWillUnmount() {
+        let { match, ws } = this.props;
         let eventId = this.props.match && this.props.match.params && this.props.match.params.id;
-        this.props.getEvent(getEventUrl + eventId);
+        console.log('unmount');
+        eventId && ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${eventId}`] }));
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.match.params.id !== this.props.match.params.id) {
-            this.props.getEvent(getEventUrl + nextProps.match.params.id);
+        let currEventId = this.props.match.params.id;
+        let nextEventId = nextProps.match.params.id;
+        if (nextEventId !== currEventId) {
+            this.props.getEvent(getEventUrl + nextEventId);
+
+            nextProps.ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${currEventId}`] }));
+            nextProps.ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${nextEventId}`], clearSubscription: false }));
         }
     }
 
@@ -42,12 +57,12 @@ class EventDetails extends Component {
         if (market.outcomes) { // Outcomes are already fetched, just open/close the window
             openCloseMarket(market.marketId);
         } else { // Fetch outcomes for the market
-            getMarket(getMarkettUrl + market.marketId, 'selectedEvent');
+            getMarket(getMarketUrl + market.marketId, 'selectedEvent')
         }
     }
 
     render() {
-        let { history, selectedEvent, priceRepresentation } = this.props;
+        let { history, selectedEvent, priceRepresentation, ws } = this.props;
 
         let homeTeamName = '';
         let awayTeamName = '';
@@ -115,7 +130,7 @@ class EventDetails extends Component {
                         </section>
                     </div>
                     <div className='event-details-football-live-list'>
-                        <LiveEventsList history={this.props.history} />
+                        <LiveEventsList history={history} ws={ws} />
                     </div>
                 </div>
             </div>

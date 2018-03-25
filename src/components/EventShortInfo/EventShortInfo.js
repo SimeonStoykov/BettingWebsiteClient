@@ -20,12 +20,17 @@ class EventShortInfo extends Component {
     }
 
     handleViewPrimaryMarket(primaryMarket) {
-        let { showHidePrimaryMarket, getMarket } = this.props;
+        let { showHidePrimaryMarket, getMarket, ws } = this.props;
 
         if (primaryMarket.outcomes) { // Show/Hide market if there are outcomes (data is already fetched)
             showHidePrimaryMarket(primaryMarket);
         } else { // Get market data if there are no outcomes
-            getMarket(getMarketUrl + primaryMarket.marketId, 'footballLiveList');
+            Promise.resolve()
+                .then(getMarket(getMarketUrl + primaryMarket.marketId, 'footballLiveList'))
+                .then(() => {
+                    console.log('subscr');
+                    ws.send(JSON.stringify({ type: 'subscribe', keys: [`m.${primaryMarket.marketId}`], clearSubscription: false }));
+                });
         }
     }
 
