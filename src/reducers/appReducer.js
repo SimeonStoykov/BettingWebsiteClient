@@ -173,8 +173,11 @@ export default (state = initialState, action) => {
                 let currentOutcome = state.getIn(['selectedEvent', 'markets', data.indexOfMarket, 'outcomes', data.indexOfOutcome]).toJS();
                 let newOutcome = { ...currentOutcome, [updatedValue]: data[updatedValue] };
 
-                console.log(currentOutcome);
-                console.log(newOutcome);
+                let currentPrice = parseFloat(currentOutcome.price.decimal);
+                let newPrice = parseFloat(newOutcome.price.decimal);
+
+                newOutcome.highlightColor = 'red';
+                newPrice > currentPrice && (newOutcome.highlightColor = 'green');
 
                 return state.setIn(['selectedEvent', 'markets', data.indexOfMarket, 'outcomes', data.indexOfOutcome], fromJS(newOutcome));
             }
