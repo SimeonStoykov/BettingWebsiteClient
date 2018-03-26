@@ -75,3 +75,12 @@ export const openCloseMarket = marketId => ({
     type: 'OPEN_CLOSE_MARKET',
     marketId
 });
+
+export const clearSelectedEvent = () => ({
+    type: 'CLEAR_SELECTED_EVENT'
+});
+
+export const updateOutcomeData = data => ({
+    type: 'UPDATE_OUTCOME_DATA',
+    data
+});

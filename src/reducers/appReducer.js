@@ -90,7 +90,7 @@ export default (state = initialState, action) => {
 
                         if (currMarket.marketId === market.marketId) {
                             return state
-                                .setIn(['selectedEvent', 'markets', i, 'outcomes'], outcomes[market.marketId])
+                                .setIn(['selectedEvent', 'markets', i, 'outcomes'], fromJS(outcomes[market.marketId]))
                                 .setIn(['selectedEvent', 'markets', i, 'isOpened'], true);
                         }
                     }
@@ -147,6 +147,38 @@ export default (state = initialState, action) => {
                     }
                 }
             }
+            return state;
+        }
+        case 'CLEAR_SELECTED_EVENT': {
+            return state.set('selectedEvent', initialState.get('selectedEvent'));
+        }
+        case 'UPDATE_OUTCOME_DATA': {
+            let data = action.data;
+            let updatedValue = data.updatedValue;
+
+            if (data.type === 'primaryMarket') {
+                let currPrimaryMarket = state.getIn(['eventsMarkets', data.eventId, data.indexOfMarket]);
+
+                if (currPrimaryMarket && currPrimaryMarket.outcomes && currPrimaryMarket.outcomes[data.indexOfOutcome]) {
+                    let newOutcomes = currPrimaryMarket.outcomes.map(rec => ({ ...rec }));
+                    newOutcomes[data.indexOfOutcome][updatedValue] = data[updatedValue];
+                    let newPrimaryMarket = { ...currPrimaryMarket, outcomes: newOutcomes };
+
+                    console.log(currPrimaryMarket.outcomes[data.indexOfOutcome]);
+                    console.log(newPrimaryMarket.outcomes[data.indexOfOutcome]);
+
+                    return state.setIn(['eventsMarkets', data.eventId, data.indexOfMarket], newPrimaryMarket);
+                }
+            } else if (data.type === 'selectedEvent') {
+                let currentOutcome = state.getIn(['selectedEvent', 'markets', data.indexOfMarket, 'outcomes', data.indexOfOutcome]).toJS();
+                let newOutcome = { ...currentOutcome, [updatedValue]: data[updatedValue] };
+
+                console.log(currentOutcome);
+                console.log(newOutcome);
+
+                return state.setIn(['selectedEvent', 'markets', data.indexOfMarket, 'outcomes', data.indexOfOutcome], fromJS(newOutcome));
+            }
+
             return state;
         }
         default:

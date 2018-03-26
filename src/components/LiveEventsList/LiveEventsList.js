@@ -11,10 +11,40 @@ import './LiveEventsList.css';
 
 import {
     fetchEvents,
-    openCloseCompetition
+    openCloseCompetition,
+    updateOutcomeData
 } from '../../actions';
 
 const eventsUrl = 'http://192.168.99.100:8888/football/live?primaryMarkets=true';
+
+function updateData({ response, eventsMarkets, selectedEvent, updateFunction, updatedValue }) {
+    let data = response.data;
+    console.log(`${updatedValue} CHANGE`);
+    let eventId = data.eventId.toString();
+
+    // Check if the current updated outcome is part of primary market with outcomes (loaded primary market)
+    let currEventMarkets = eventsMarkets[eventId];
+
+    if (currEventMarkets) {
+        let indexOfMarket = currEventMarkets.map(rec => rec.marketId).indexOf(data.marketId);
+        if (indexOfMarket > -1 && currEventMarkets[indexOfMarket].outcomes) {
+            let indexOfOutcome = currEventMarkets[indexOfMarket].outcomes.map(o => o.outcomeId).indexOf(data.outcomeId);
+            indexOfOutcome > -1 && updateFunction({ eventId, indexOfMarket, indexOfOutcome, [updatedValue]: data[updatedValue], type: 'primaryMarket', updatedValue });
+        }
+    }
+
+    // Check if the current updated outcome is part of the selected event and updated it there
+    let selectedEventId = selectedEvent.eventId && selectedEvent.eventId.toString();
+
+    if (selectedEventId && selectedEventId === eventId) {
+        let indexOfMarket = selectedEvent.markets.findIndex(rec => rec.marketId === data.marketId);
+
+        if (indexOfMarket !== -1 && selectedEvent.markets[indexOfMarket].outcomes) {
+            let indexOfOutcome = selectedEvent.markets[indexOfMarket].outcomes.findIndex(rec => rec.outcomeId === data.outcomeId);
+            indexOfOutcome !== -1 && updateFunction({ eventId, indexOfMarket, indexOfOutcome, [updatedValue]: data[updatedValue], type: 'selectedEvent', updatedValue });
+        }
+    }
+}
 
 class LiveEventsList extends Component {
     constructor(props) {
@@ -23,35 +53,32 @@ class LiveEventsList extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchEvents(eventsUrl);
+        let { fetchEvents, ws, updateOutcomeData } = this.props;
 
-        this.props.ws.onmessage = e => {
+        fetchEvents(eventsUrl);
+
+        ws.onmessage = e => {
             let response = JSON.parse(e.data);
-            console.log(response);
-
-            //CHECK IF WE HAVE SELECTED EVENT AND UPDATE ITS OUTCOMES IF WE HAVE AND THAN CHECK IF WE HAVE THE OUTCOME IN THE EVENTSMARKETS OBJECT AND UPDATE IT THERE
 
             switch (response.type) {
                 case 'PRICE_CHANGE': {
-                    let data = response.data;
-                    let eventId = data.eventId.toString();
-
-                    // let markets = state.getIn(['eventsMarkets', eventId]).toJS();
-                    // let primaryMarket = markets[0];
-
-                    // if (primaryMarket && primaryMarket.outcomes) {
-                    //     for (let i = 0; primaryMarket.outcomes.length; i++) {
-                    //         let currentOutcome = primaryMarket.outcomes[i];
-                    //         if (currentOutcome.outcomeId === data.outcomeId) {
-                    //             return state.setIn(['eventsMarkets', eventId, 0, 'outcomes', i, 'price'], data.price);
-                    //         }
-                    //     }
-                    // }
-
-                    // return state;
-
-                    // let event = state.getIn('eventsMarkets', e.data.eventId).toJS();
-                    // console.log(event);
+                    updateData({
+                        response,
+                        eventsMarkets: this.props.eventsMarkets,
+                        selectedEvent: this.props.selectedEvent,
+                        updateFunction: updateOutcomeData,
+                        updatedValue: 'price'
+                    });
+                }
+                    break;
+                case 'OUTCOME_STATUS': {
+                    updateData({
+                        response,
+                        eventsMarkets: this.props.eventsMarkets,
+                        selectedEvent: this.props.selectedEvent,
+                        updateFunction: updateOutcomeData,
+                        updatedValue: 'status'
+                    });
                 }
                     break;
                 default:
@@ -61,8 +88,7 @@ class LiveEventsList extends Component {
     }
 
     componentWillUnmount() {
-        console.log('unmount live list');
-        this.props.ws.send(JSON.stringify({type: 'unsubscribe'}));
+        this.props.ws.send(JSON.stringify({ type: 'unsubscribe' }));
     }
 
     handleCompetitionTitleClick(id) {
@@ -129,14 +155,17 @@ const mapStateToProps = state => {
     return {
         competitions: state.appData.get('competitions').toJS(),
         eventsAreLoading: state.appData.get('eventsAreLoading'),
-        eventsLoadingError: state.appData.get('eventsLoadingError')
+        eventsLoadingError: state.appData.get('eventsLoadingError'),
+        eventsMarkets: state.appData.get('eventsMarkets').toJS(),
+        selectedEvent: state.appData.get('selectedEvent').toJS()
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchEvents: url => dispatch(fetchEvents(url)),
-        openCloseCompetition: competition => dispatch(openCloseCompetition(competition))
+        openCloseCompetition: competition => dispatch(openCloseCompetition(competition)),
+        updateOutcomeData: data => dispatch(updateOutcomeData(data))
     }
 };
 

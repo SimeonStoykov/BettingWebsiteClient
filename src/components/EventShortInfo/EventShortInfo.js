@@ -20,7 +20,7 @@ class EventShortInfo extends Component {
     }
 
     handleViewPrimaryMarket(primaryMarket) {
-        let { showHidePrimaryMarket, getMarket, ws } = this.props;
+        let { showHidePrimaryMarket, getMarket, ws, selectedEvent } = this.props;
 
         if (primaryMarket.outcomes) { // Show/Hide market if there are outcomes (data is already fetched)
             showHidePrimaryMarket(primaryMarket);
@@ -28,8 +28,11 @@ class EventShortInfo extends Component {
             Promise.resolve()
                 .then(getMarket(getMarketUrl + primaryMarket.marketId, 'footballLiveList'))
                 .then(() => {
-                    console.log('subscr');
-                    ws.send(JSON.stringify({ type: 'subscribe', keys: [`m.${primaryMarket.marketId}`], clearSubscription: false }));
+                    let primaryMarketInSelectedEvent = selectedEvent.markets.find(m => m.marketId === primaryMarket.marketId);
+                    if (!primaryMarketInSelectedEvent) { // Subscribe to primary market updates only if it is not part of the current selected event
+                        console.log('subscr');
+                        ws.send(JSON.stringify({ type: 'subscribe', keys: [`m.${primaryMarket.marketId}`], clearSubscription: false }));
+                    }
                 });
         }
     }
@@ -78,7 +81,8 @@ EventShortInfo.propTypes = {
 const mapStateToProps = state => {
     return {
         eventsMarkets: state.appData.get('eventsMarkets').toJS(),
-        priceRepresentation: state.appData.get('priceRepresentation')
+        priceRepresentation: state.appData.get('priceRepresentation'),
+        selectedEvent: state.appData.get('selectedEvent').toJS()
     };
 }
 

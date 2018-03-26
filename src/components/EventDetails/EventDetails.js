@@ -13,7 +13,8 @@ import error from '../../images/error.svg';
 import {
     getEvent,
     getMarket,
-    openCloseMarket
+    openCloseMarket,
+    clearSelectedEvent
 } from '../../actions';
 
 const getEventUrl = 'http://192.168.99.100:8888/sportsbook/event/';
@@ -28,26 +29,34 @@ class EventDetails extends Component {
     componentDidMount() {
         let { match, getEvent, ws } = this.props;
         let eventId = match && match.params && match.params.id;
-        getEvent(getEventUrl + eventId);
-        //subscribe after getEvent in promise and subscrb/unsubscrb in will receive props
-        ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${eventId}`], clearSubscription: false }));
+
+        Promise.resolve()
+            .then(getEvent(getEventUrl + eventId))
+            .then(() => {
+                ws.onopen = () => ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${eventId}`], clearSubscription: false }));
+                ws.readyState === 1 && ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${eventId}`], clearSubscription: false }));
+            });
     }
 
     componentWillUnmount() {
-        let { match, ws } = this.props;
+        let { match, ws, clearSelectedEvent } = this.props;
         let eventId = this.props.match && this.props.match.params && this.props.match.params.id;
-        console.log('unmount');
         eventId && ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${eventId}`] }));
+        console.log('unmount');
+        clearSelectedEvent();
     }
 
     componentWillReceiveProps(nextProps) {
         let currEventId = this.props.match.params.id;
         let nextEventId = nextProps.match.params.id;
-        if (nextEventId !== currEventId) {
-            this.props.getEvent(getEventUrl + nextEventId);
 
-            nextProps.ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${currEventId}`] }));
-            nextProps.ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${nextEventId}`], clearSubscription: false }));
+        if (nextEventId !== currEventId) {
+            Promise.resolve()
+                .then(nextProps.getEvent(getEventUrl + nextEventId))
+                .then(() => {
+                    nextProps.ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${currEventId}`] }));
+                    nextProps.ws.send(JSON.stringify({ type: 'subscribe', keys: [`e.${nextEventId}`], clearSubscription: false }));
+                });
         }
     }
 
@@ -155,7 +164,8 @@ const mapDispatchToProps = dispatch => {
     return {
         getEvent: url => dispatch(getEvent(url)),
         getMarket: (marketId, caller) => dispatch(getMarket(marketId, caller)),
-        openCloseMarket: market => dispatch(openCloseMarket(market))
+        openCloseMarket: market => dispatch(openCloseMarket(market)),
+        clearSelectedEvent: () => dispatch(clearSelectedEvent())
     }
 };
 
