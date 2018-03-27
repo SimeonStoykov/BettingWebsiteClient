@@ -84,3 +84,8 @@ export const updateOutcomeData = data => ({
     type: 'UPDATE_OUTCOME_DATA',
     data
 });
+
+export const clearPriceHighlight = (outcome) => ({
+    type: 'CLEAR_PRICE_HIGHLIGHT',
+    outcome
+});

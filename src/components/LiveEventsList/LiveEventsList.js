@@ -9,17 +9,18 @@ import spinner from '../../images/spinner.svg';
 import error from '../../images/error.svg';
 import './LiveEventsList.css';
 
+import { config } from '../../config';
+
 import {
     fetchEvents,
     openCloseCompetition,
     updateOutcomeData
 } from '../../actions';
 
-const eventsUrl = 'http://192.168.99.100:8888/football/live?primaryMarkets=true';
+const eventsUrl = `http://${config.host}:8888/football/live?primaryMarkets=true`;
 
 function updateData({ response, eventsMarkets, selectedEvent, updateFunction, updatedValue }) {
     let data = response.data;
-    console.log(`${updatedValue} CHANGE`);
     let eventId = data.eventId.toString();
 
     // Check if the current updated outcome is part of primary market with outcomes (loaded primary market)
@@ -61,7 +62,7 @@ class LiveEventsList extends Component {
             let response = JSON.parse(e.data);
 
             switch (response.type) {
-                case 'PRICE_CHANGE': {
+                case 'PRICE_CHANGE':
                     updateData({
                         response,
                         eventsMarkets: this.props.eventsMarkets,
@@ -69,9 +70,8 @@ class LiveEventsList extends Component {
                         updateFunction: updateOutcomeData,
                         updatedValue: 'price'
                     });
-                }
                     break;
-                case 'OUTCOME_STATUS': {
+                case 'OUTCOME_STATUS':
                     updateData({
                         response,
                         eventsMarkets: this.props.eventsMarkets,
@@ -79,7 +79,6 @@ class LiveEventsList extends Component {
                         updateFunction: updateOutcomeData,
                         updatedValue: 'status'
                     });
-                }
                     break;
                 default:
                     break;

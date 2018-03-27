@@ -1,7 +1,7 @@
 import React from 'react';
 import './MarketOutcomes.css';
 
-const MarketOutcomes = ({ data, priceRepresentation }) => {
+const MarketOutcomes = ({ data, priceRepresentation, clearPriceHighlight }) => {
     function getOutcomePrice(outcome) {
         let price = null;
         if (outcome.price) {
@@ -12,6 +12,18 @@ const MarketOutcomes = ({ data, priceRepresentation }) => {
         return price;
     }
 
+    function getOutcomeClassName(o, outcomeClassName) {
+        if (o.highlightColor) {
+            o.highlightColor === 'red' && (outcomeClassName += ' red-highlight');
+            o.highlightColor === 'green' && (outcomeClassName += ' green-highlight');
+            setTimeout(() => {
+                clearPriceHighlight(o);
+            }, (5000));
+        }
+
+        return outcomeClassName;
+    }
+
     function getCorrectScoreOutcomeData(currOutcome) {
         let currOutcomeData = <div className='correct-score-outcome-data'>-</div>;
 
@@ -19,9 +31,13 @@ const MarketOutcomes = ({ data, priceRepresentation }) => {
             if (currOutcome.status.suspended) {
                 currOutcomeData = <div className='correct-score-outcome-data suspended'>Susp</div>;
             } else {
-                currOutcomeData = <div className='correct-score-outcome-data correct-score-have-data'>
-                    {currOutcome.score.home}-{currOutcome.score.away} <span className='price'>{getOutcomePrice(currOutcome)}</span>
-                </div>;
+                let outcomeClassName = 'correct-score-outcome-data correct-score-have-data';
+                outcomeClassName = getOutcomeClassName(currOutcome, outcomeClassName);
+                debugger;
+                currOutcomeData = 
+                    <div className={outcomeClassName}>
+                        {currOutcome.score.home}-{currOutcome.score.away} <span className='price'>{getOutcomePrice(currOutcome)}</span>
+                    </div>;
             }
         }
 
@@ -42,11 +58,13 @@ const MarketOutcomes = ({ data, priceRepresentation }) => {
                                 } else if (o.status.suspended) {
                                     outcomePriceData = <div className='standard-outcome-price suspended'>Susp</div>;
                                 } else {
-                                    outcomePriceData = <div className='price standard-outcome-price'>{getOutcomePrice(o)}</div>;
+                                    let outcomeClassName = 'price standard-outcome-price';
+                                    outcomeClassName = getOutcomeClassName(o, outcomeClassName);
+                                    outcomePriceData = <div className={outcomeClassName}>{getOutcomePrice(o)}</div>;
                                 }
 
                                 return (
-                                    <div key={o.outcomeId} className='standard-outcome-box'>
+                                    <div key={o.outcomeId} className={'standard-outcome-box'}>
                                         <div className='standard-outcome-name'>{o.name}</div>
                                         {outcomePriceData}
                                     </div>
@@ -68,8 +86,10 @@ const MarketOutcomes = ({ data, priceRepresentation }) => {
                                 } else if (o.status.suspended) {
                                     outcomeData = <div key={o.outcomeId} className='suspended'>Susp</div>;
                                 } else {
+                                    let outcomeClassName = 'win-draw-win-outcome-box';
+                                    outcomeClassName = getOutcomeClassName(o, outcomeClassName);
                                     outcomeData =
-                                        <div key={o.outcomeId} className='win-draw-win-outcome-box'>
+                                        <div key={o.outcomeId} className={outcomeClassName}>
                                             <strong>{o.type === 'draw' ? 'Draw' : 'Win'}</strong> <span className='price'>{getOutcomePrice(o)}</span>
                                         </div>;
                                 }

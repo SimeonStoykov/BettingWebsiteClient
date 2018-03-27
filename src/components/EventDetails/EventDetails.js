@@ -7,18 +7,19 @@ import MarketOutcomes from '../MarketOutcomes/MarketOutcomes.js';
 import './EventDetails.css';
 import arrowUp from '../../images/up-arrow.svg';
 import arrowDown from '../../images/down-arrow.svg';
-import spinner from '../../images/spinner.svg';
-import error from '../../images/error.svg';
+
+import { config } from '../../config';
 
 import {
     getEvent,
     getMarket,
     openCloseMarket,
-    clearSelectedEvent
+    clearSelectedEvent,
+    clearPriceHighlight
 } from '../../actions';
 
-const getEventUrl = 'http://192.168.99.100:8888/sportsbook/event/';
-const getMarketUrl = 'http://192.168.99.100:8888/sportsbook/market/';
+const getEventUrl = `http://${config.host}:8888/sportsbook/event/`;
+const getMarketUrl = `http://${config.host}:8888/sportsbook/market/`;
 
 class EventDetails extends Component {
     constructor(props) {
@@ -40,9 +41,8 @@ class EventDetails extends Component {
 
     componentWillUnmount() {
         let { match, ws, clearSelectedEvent } = this.props;
-        let eventId = this.props.match && this.props.match.params && this.props.match.params.id;
+        let eventId = match && match.params && match.params.id;
         eventId && ws.send(JSON.stringify({ type: 'unsubscribe', keys: [`e.${eventId}`] }));
-        console.log('unmount');
         clearSelectedEvent();
     }
 
@@ -71,7 +71,7 @@ class EventDetails extends Component {
     }
 
     render() {
-        let { history, selectedEvent, priceRepresentation, ws } = this.props;
+        let { history, selectedEvent, priceRepresentation, ws, clearPriceHighlight } = this.props;
 
         let homeTeamName = '';
         let awayTeamName = '';
@@ -130,7 +130,7 @@ class EventDetails extends Component {
                                             </div>
                                             {
                                                 m.isOpened && m.outcomes &&
-                                                <MarketOutcomes data={m} priceRepresentation={priceRepresentation} />
+                                                <MarketOutcomes data={m} priceRepresentation={priceRepresentation} clearPriceHighlight={clearPriceHighlight} />
                                             }
                                         </div>
                                     );
@@ -165,6 +165,7 @@ const mapDispatchToProps = dispatch => {
         getEvent: url => dispatch(getEvent(url)),
         getMarket: (marketId, caller) => dispatch(getMarket(marketId, caller)),
         openCloseMarket: market => dispatch(openCloseMarket(market)),
+        clearPriceHighlight: outcome => dispatch(clearPriceHighlight(outcome)),
         clearSelectedEvent: () => dispatch(clearSelectedEvent())
     }
 };

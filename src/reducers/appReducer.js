@@ -162,10 +162,14 @@ export default (state = initialState, action) => {
                 if (currPrimaryMarket && currPrimaryMarket.outcomes && currPrimaryMarket.outcomes[data.indexOfOutcome]) {
                     let newOutcomes = currPrimaryMarket.outcomes.map(rec => ({ ...rec }));
                     newOutcomes[data.indexOfOutcome][updatedValue] = data[updatedValue];
-                    let newPrimaryMarket = { ...currPrimaryMarket, outcomes: newOutcomes };
 
-                    console.log(currPrimaryMarket.outcomes[data.indexOfOutcome]);
-                    console.log(newPrimaryMarket.outcomes[data.indexOfOutcome]);
+                    let currentPrice = parseFloat(currPrimaryMarket.outcomes[data.indexOfOutcome].price.decimal);
+                    let newPrice = parseFloat(newOutcomes[data.indexOfOutcome].price.decimal);
+
+                    newPrice < currentPrice && (newOutcomes[data.indexOfOutcome].highlightColor = 'red');
+                    newPrice > currentPrice && (newOutcomes[data.indexOfOutcome].highlightColor = 'green');
+
+                    let newPrimaryMarket = { ...currPrimaryMarket, outcomes: newOutcomes };
 
                     return state.setIn(['eventsMarkets', data.eventId, data.indexOfMarket], newPrimaryMarket);
                 }
@@ -176,10 +180,53 @@ export default (state = initialState, action) => {
                 let currentPrice = parseFloat(currentOutcome.price.decimal);
                 let newPrice = parseFloat(newOutcome.price.decimal);
 
-                newOutcome.highlightColor = 'red';
+                newPrice < currentPrice && (newOutcome.highlightColor = 'red');
                 newPrice > currentPrice && (newOutcome.highlightColor = 'green');
 
                 return state.setIn(['selectedEvent', 'markets', data.indexOfMarket, 'outcomes', data.indexOfOutcome], fromJS(newOutcome));
+            }
+
+            return state;
+        }
+        case 'CLEAR_PRICE_HIGHLIGHT': {
+            let outcome = action.outcome;
+            let selectedEvent = state.get('selectedEvent').toJS();
+
+            // Check if cleared outcome is present in the current selected event
+            if (selectedEvent.eventId === outcome.eventId) {
+                let indexOfMarket = selectedEvent.markets.findIndex(rec => rec.marketId === outcome.marketId);
+
+                if (indexOfMarket !== -1) {
+                    let indexOfOutcome = selectedEvent.markets[indexOfMarket].outcomes.findIndex(rec => rec.outcomeId === outcome.outcomeId);
+
+                    if (indexOfOutcome !== -1) {
+                        let currentOutcome = state.getIn(['selectedEvent', 'markets', indexOfMarket, 'outcomes', indexOfOutcome]).toJS();
+                        let newOutcome = { ...currentOutcome, highlightColor: null };
+                
+                        state = state.setIn(['selectedEvent', 'markets', indexOfMarket, 'outcomes', indexOfOutcome], fromJS(newOutcome));
+                    }
+                }
+            }
+
+            let currEventMarkets = state.getIn(['eventsMarkets', outcome.eventId.toString()]);
+
+            if (currEventMarkets) {
+                currEventMarkets = currEventMarkets.toJS();
+                let marketIndex = currEventMarkets.findIndex(rec => rec.marketId === outcome.marketId);
+
+                if (marketIndex !== -1 && currEventMarkets[marketIndex].outcomes) {
+                    let outcomeIndex = currEventMarkets[marketIndex].outcomes.findIndex(rec => rec.outcomeId === outcome.outcomeId);
+
+                    if (outcomeIndex !== -1) {
+                        let currMarket = currEventMarkets[marketIndex];
+
+                        let newOutcomes = currMarket.outcomes.map(rec => ({ ...rec }));
+                        let newMarket = { ...currMarket, outcomes: newOutcomes };
+                        newMarket.outcomes[outcomeIndex].highlightColor = null;
+
+                        state = state.setIn(['eventsMarkets', outcome.eventId.toString(), marketIndex], fromJS(newMarket));
+                    }
+                }
             }
 
             return state;

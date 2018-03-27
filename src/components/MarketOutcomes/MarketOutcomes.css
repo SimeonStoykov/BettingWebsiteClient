@@ -132,3 +132,13 @@
     color: #484848;
     background-color: #fff;
 }
+
+.red-highlight {
+    background-image: none;
+    background-color: #fae7e7;
+}
+
+.green-highlight {
+    background-image: none;
+    background-color: #ceebc5;
+}

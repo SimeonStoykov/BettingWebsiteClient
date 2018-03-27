@@ -5,12 +5,15 @@ import './EventShortInfo.css';
 import MarketOutcomes from '../MarketOutcomes/MarketOutcomes.js';
 import tokenImg from '../../images/token.svg';
 
+import { config } from '../../config';
+
 import {
     getMarket,
-    showHidePrimaryMarket
+    showHidePrimaryMarket,
+    clearPriceHighlight
 } from '../../actions';
 
-const getMarketUrl = 'http://192.168.99.100:8888/sportsbook/market/';
+const getMarketUrl = `http://${config.host}:8888/sportsbook/market/`;
 
 class EventShortInfo extends Component {
     constructor(props) {
@@ -30,7 +33,6 @@ class EventShortInfo extends Component {
                 .then(() => {
                     let primaryMarketInSelectedEvent = selectedEvent.markets.find(m => m.marketId === primaryMarket.marketId);
                     if (!primaryMarketInSelectedEvent) { // Subscribe to primary market updates only if it is not part of the current selected event
-                        console.log('subscr');
                         ws.send(JSON.stringify({ type: 'subscribe', keys: [`m.${primaryMarket.marketId}`], clearSubscription: false }));
                     }
                 });
@@ -42,7 +44,7 @@ class EventShortInfo extends Component {
     }
 
     render() {
-        let { data, eventsMarkets, priceRepresentation } = this.props;
+        let { data, eventsMarkets, priceRepresentation, clearPriceHighlight } = this.props;
         let primaryMarket = (eventsMarkets && eventsMarkets[data.eventId] && eventsMarkets[data.eventId][0]) || {};
 
         if (data.competitors && data.competitors.length === 2 &&
@@ -63,7 +65,7 @@ class EventShortInfo extends Component {
                     </div>
                     {
                         primaryMarket.outcomes && primaryMarket.isVisible &&
-                        <MarketOutcomes data={primaryMarket} priceRepresentation={priceRepresentation} />
+                        <MarketOutcomes data={primaryMarket} priceRepresentation={priceRepresentation} clearPriceHighlight={clearPriceHighlight} />
                     }
                 </div>
             );
@@ -75,7 +77,8 @@ class EventShortInfo extends Component {
 EventShortInfo.propTypes = {
     eventsMarkets: PropTypes.object,
     priceRepresentation: PropTypes.string,
-    getMarket: PropTypes.func
+    getMarket: PropTypes.func,
+    clearPriceHighlight: PropTypes.func
 };
 
 const mapStateToProps = state => {
@@ -89,7 +92,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getMarket: (marketId, caller) => dispatch(getMarket(marketId, caller)),
-        showHidePrimaryMarket: market => dispatch(showHidePrimaryMarket(market))
+        showHidePrimaryMarket: market => dispatch(showHidePrimaryMarket(market)),
+        clearPriceHighlight: outcome => dispatch(clearPriceHighlight(outcome))
     }
 };
 

@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './components/Home/Home.js';
 import EventDetails from './components/EventDetails/EventDetails.js';
 
-const wsUrl = 'ws://192.168.99.100:8889';
+import { config } from './config';
+
+const wsUrl = `ws://${config.host}:8889`;
 let ws = new WebSocket(wsUrl);
 
 export default () => {
