@@ -1,5 +1,7 @@
 Betting website client written on React JS
 
+I have decided to use React JS for the front end, because it fast and reliable and works very well with real time data
+
 To run the application:
 
 1. Run the provided mock API
