@@ -1,4 +1,4 @@
-Betting website client written with React.js, Redux, Redux Thunk, Immutable.js and React Router Dom.
+Betting website client written with React.js, Redux, Redux Thunk, Immutable.js and React Router.
 
 I have decided to use React JS for the front end, because it fast and reliable and works very well with real time data
 
